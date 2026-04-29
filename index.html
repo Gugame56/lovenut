@@ -2,7 +2,6 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <!-- จุดสำคัญที่ทำให้รองรับมือถือคือบรรทัดนี้ครับ -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>มีความลับจะบอก ✨</title>
   <style>
@@ -13,19 +12,17 @@
     
     #app {
       min-height: 100vh;
-      /* รองรับมือถือที่มีแถบ URL ด้านล่าง */
       min-height: 100dvh; 
       background: linear-gradient(135deg, #fff0f8 0%, #fce4ec 50%, #f8bbd0 100%);
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
-      padding: 1rem; /* เพิ่มขอบกันชนสำหรับมือถือ */
+      padding: 1rem; 
     }
     
     .card {
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(16px);
       border-radius: 2rem;
-      /* ปรับ padding ให้สมดุลขึ้นบนจอมือถือ */
       padding: 2rem 1.5rem; 
       width: 100%;
       max-width: 400px;
@@ -80,12 +77,30 @@
 
     /* Page 2 */
     .video-wrap {
-      border-radius:1.2rem; overflow:hidden; aspect-ratio:16/9;
-      margin-bottom:1.2rem; background:#fce4ec;
+      border-radius:1.2rem; 
+      overflow:hidden; 
+      /* แก้เป็น 9/16 เพื่อรองรับคลิปแนวตั้ง */
+      aspect-ratio: 9/16; 
+      margin-bottom:1.2rem; 
+      background:#000; /* เปลี่ยนพื้นหลังเป็นสีดำให้กลืนกับคลิป */
       box-shadow:0 4px 20px rgba(233,30,99,0.15);
-      position:relative; width: 100%;
+      position:relative; 
+      width: 100%;
+      /* จำกัดความสูงสูงสุด ไม่ให้คลิปยาวเกินไปจนดันปุ่มหายบนจอมือถือเล็กๆ */
+      max-height: 45vh; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+    /* ปรับแต่งแท็กวิดีโอ */
+    .video-wrap video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; /* ทำให้คลิปเต็มกรอบพอดี */
+      border: none; 
+      outline: none;
+    }
+    
     .title2 { font-size:1.4rem; font-weight:600; color:#ad1457; margin-bottom:0.3rem; }
     .sub2   { font-size:0.9rem; color:#e91e63; opacity:0.65; margin-bottom:1.4rem; }
 
@@ -99,7 +114,7 @@
     .btn-group { 
       display:flex; 
       justify-content:center; 
-      gap: 0.8rem; /* ลดระยะห่างลงนิดหน่อยสำหรับจอมือถือ */
+      gap: 0.8rem; 
       margin-top:0.5rem; 
       align-items:center; 
       position:relative; 
@@ -112,7 +127,7 @@
       padding:0.65rem 1.5rem; font-size:0.95rem; font-family:'Prompt',sans-serif;
       cursor:pointer; box-shadow:0 4px 16px rgba(233,30,99,0.35);
       transition:transform 0.2s,box-shadow 0.2s; z-index:5;
-      flex: 1; /* ให้ปุ่มขยายพอดีกรอบ */
+      flex: 1; 
       max-width: 140px;
     }
     .btn-yes:hover { transform:scale(1.05); box-shadow:0 6px 24px rgba(233,30,99,0.5); }
@@ -123,7 +138,6 @@
       cursor:pointer; transition:all 0.15s; 
       z-index:5; flex: 1;
       max-width: 140px;
-      /* ลบ position: absolute ออก เพื่อให้มันไหลจัดเรียงแบบสวยๆ */
     }
     .btn-no:hover { background:#f0f0f0; }
 
@@ -180,13 +194,12 @@
     <!-- PAGE 2 -->
     <div class="page" id="page2">
       <div class="video-wrap">
-        <!-- เพิ่ม Video หรือ Iframe ตามที่คุณใช้งาน -->
-        <iframe src="love.mp4"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <!-- ใช้แท็ก <video> แทน iframe พร้อมใส่ controls ให้กดขยายจอได้ และ playsinline ป้องกันการเด้งเต็มจอเองบน iOS -->
+        <video src="love.mp4" controls playsinline preload="auto"></video>
       </div>
       <div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       <div class="title2">เป็นแฟนกันนะ 💖</div>
-      <div class="sub2">ให้เราดูแลแกไปตลอดเลยได้ไหม?</div>
+      <div class="sub2">ให้พี่ได้ดูเเลได้ไหม?</div>
       <div class="btn-group">
         <button class="btn-yes" onclick="sayYes()">ตกลงค่ะ 🥰</button>
         <button class="btn-no" id="noBtn" onmouseenter="runAway()" ontouchstart="runAway()">ไม่เอาอ่ะ 😜</button>
@@ -307,7 +320,6 @@ function runAway() {
   const btn = document.getElementById('noBtn');
   const group = btn.parentElement;
   
-  // ปรับการคำนวณตำแหน่งหนีให้ไม่หลุดจอ
   const gw = group.offsetWidth, bw = btn.offsetWidth;
   const maxX = gw - bw;
   
